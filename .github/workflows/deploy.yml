@@ -20,4 +20,6 @@ jobs:
           FOLDER: dist
           BUILD_SCRIPT: npm install && npm run-script build
           CNAME: elicrow.com
+      - name: Add Additional Files
+        run: touch "./.nojekyll" && echo "$PWD"
 
