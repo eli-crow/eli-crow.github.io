@@ -7,7 +7,7 @@
         <span class="line">is a designer and developer</span>
         <span class="line">making tools for business folk</span>
         <span class="line">
-          at
+          with
           <a class="link" href="https://www.sep.com/" target="_blank">sep.com</a>.
         </span>
       </p>
