@@ -111,5 +111,8 @@ export default {
 
 <style scoped>
 .Crow {
+  /* background-color: var(--surface-1); */
+  border: solid 1px var(--surface-1);
+  border-radius: 9px;
 }
 </style>
