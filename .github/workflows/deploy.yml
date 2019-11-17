@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@2.0.3
+        uses: eli-crow/github-pages-deploy-action
         env:
           ACCESS_TOKEN: ${{ secrets.GH_PAT }}
           BASE_BRANCH: deploy
@@ -20,6 +20,5 @@ jobs:
           FOLDER: dist
           BUILD_SCRIPT: npm install && npm run-script build
           CNAME: elicrow.com
-      - name: Add Additional Files
-        run: touch "./.nojekyll" && echo "$PWD"
+          NOJEKYLL: skip
 
