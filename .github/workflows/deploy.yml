@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: 
-      - master
+      - deploy
 
 jobs:
   build:
@@ -15,8 +15,8 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@2.0.3
         env:
           ACCESS_TOKEN: ${{ secrets.GH_PAT }}
-          BASE_BRANCH: master
-          BRANCH: gh-pages
+          BASE_BRANCH: deploy
+          BRANCH: master
           FOLDER: dist
           BUILD_SCRIPT: npm install && npm run-script build
 
