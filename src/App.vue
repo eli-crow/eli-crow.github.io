@@ -5,7 +5,7 @@
       <h1>Eli Crow</h1>
       <p class="large">
         <span class="line">is a designer and developer</span>
-        <span class="line">making software for business folk</span>
+        <span class="line">making tools for business folk</span>
         <span class="line">
           at
           <a class="link" href="https://www.sep.com/" target="_blank">sep.com</a>.
