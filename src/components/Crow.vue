@@ -13,14 +13,18 @@ import SimplexNoise from 'simplex-noise'
 import textureSnake from '../assets/snake.png'
 import textureWings from '../assets/wings.png'
 
+const lerp = (a,b,t) => a * (1-t) + b * t
+const angleDifference = (a,b,_d=a-b) => _d + ((_d > Math.PI) ? -2*Math.PI : (_d<-Math.PI) ? 2*Math.PI : 0)
+
 export default {
   mounted () {
     const JOINT_LENGTH = 14
-    const JOINT_MAX_ANGLE_MAGNITUDE = Math.PI * 0.1
-    const JOINT_LERP_FACTOR = 0.98
-    const JOINT_ANGLE_LERP_FACTOR = 0.5
+    const JOINT_LENGTH_MAX = 14
+    const JOINT_MAX_ANGLE_MAGNITUDE = Math.PI * 0.08
+    const JOINT_LERP_FACTOR = 0.4
+    const JOINT_ANGLE_LERP_FACTOR = 0.75
 
-    const noise = new SimplexNoise()
+    const noise = new SimplexNoise(Math.random())
 
     const app = new PIXI.Application({
       view: this.$refs.canvas,
@@ -30,75 +34,99 @@ export default {
       resizeTo: this.$el,
     })
 
-    const mouse = app.renderer.plugins.interaction.mouse.global
+    const target = new PIXI.Point()
+    // const target = app.renderer.plugins.interaction.mouse.global
 
     const snakePoints = Array.from({length: 100}, (_, i) => new PIXI.Point(i * JOINT_LENGTH, 0))
-    const snakePointsIncludingMouse = [...snakePoints, mouse]
+    const snakePointsIncludingTarget = [...snakePoints, target]
     const snake = new PIXI.SimpleRope(PIXI.Texture.from(textureSnake), snakePoints, 0);
     snake.x = 0;
     app.stage.addChild(snake)
 
     const wings = new PIXI.Sprite(PIXI.Texture.from(textureWings))
-    app.stage.addChild(wings)
     wings.anchor.set(0.5)
+    app.stage.addChild(wings)
 
+    const startTime = Date.now()
     app.ticker.add(() => {
+      const time = (Date.now() - startTime) / 1000
+
+
+      const xSimp = 0.2 * noise.noise2D(0, time)
+      const ySimp = 0.2 * noise.noise2D(100, time)
+      const xCirc = 1.0 * Math.cos(time * 0.723)
+      const yCirc = 1.0 * Math.cos(time * 0.9568)
+      target.x = ((xSimp + xCirc)*0.5+0.5) * app.renderer.width  
+      target.y = ((ySimp + yCirc)*0.5+0.5) * app.renderer.height  
 
       //enforce soft maximum angle magnitude constraints on the joints
-      for (let i = snakePointsIncludingMouse.length-2, ii = snakePointsIncludingMouse.length; i>=1; i--) {
-        const last = snakePointsIncludingMouse[i+1]
-        const curr = snakePointsIncludingMouse[i]
-        const next = snakePointsIncludingMouse[i-1]
+      const newAngles = []
+      for (let i = snakePointsIncludingTarget.length-3, ii = snakePointsIncludingTarget.length; i>=0; i--) {
+        const last2 = snakePointsIncludingTarget[i+2] 
+        const last = snakePointsIncludingTarget[i+1]
+        const curr = snakePointsIncludingTarget[i]
 
         const currXDiff = curr.x - last.x
         const currYDiff = curr.y - last.y
-        const currLength = Math.sqrt(currXDiff**2 + currYDiff**2)
-        const nextXDiff = next.x - curr.x
-        const nextYDiff = next.y - curr.y
-        const nextLength = Math.sqrt(nextXDiff**2 + nextYDiff**2)
-        const currAngle = Math.atan2(currYDiff, currXDiff)
-        const nextAngle = Math.atan2(nextYDiff, nextXDiff)
+        const lastXDiff = last.x - last2.x
+        const lastYDiff = last.y - last2.y
 
-        let angleDifference = nextAngle - currAngle
-        angleDifference += (angleDifference>Math.PI) ? -2*Math.PI : (angleDifference<-Math.PI) ? 2*Math.PI : 0
+        const currLength = Math.sqrt(currXDiff**2 + currYDiff**2)
+        const lastLength = Math.sqrt(lastXDiff**2 + lastYDiff**2)
+        
+        const currAngle = Math.atan2(currYDiff, currXDiff)
+        const lastAngle = Math.atan2(lastYDiff, lastXDiff)
+
+        const jointAngleDifference = angleDifference(currAngle, lastAngle)
 
         if (i === 80) {
-          wings.position.copyFrom(curr)
+          wings.position.x = curr.x
+          wings.position.y = curr.y
           wings.rotation = currAngle + Math.PI
         }
 
         let newAngle
-        if (angleDifference < -JOINT_MAX_ANGLE_MAGNITUDE) {
-          newAngle = currAngle - JOINT_MAX_ANGLE_MAGNITUDE
+        if (jointAngleDifference < -JOINT_MAX_ANGLE_MAGNITUDE) {
+          newAngle = lastAngle - JOINT_MAX_ANGLE_MAGNITUDE
         }
-        else if (angleDifference > JOINT_MAX_ANGLE_MAGNITUDE) {
-          newAngle = currAngle + JOINT_MAX_ANGLE_MAGNITUDE
-        } else {
+        else if (jointAngleDifference > JOINT_MAX_ANGLE_MAGNITUDE) {
+          newAngle = lastAngle + JOINT_MAX_ANGLE_MAGNITUDE
+        } 
+        else {
           continue
         }
         
-        const targetX = curr.x + Math.cos(newAngle) * nextLength
-        const targetY = curr.y + Math.sin(newAngle) * nextLength
+        const targetX = last.x + Math.cos(newAngle) * currLength
+        const targetY = last.y + Math.sin(newAngle) * currLength
 
-        next.x = next.x * (1-JOINT_ANGLE_LERP_FACTOR) + targetX * JOINT_ANGLE_LERP_FACTOR
-        next.y = next.y * (1-JOINT_ANGLE_LERP_FACTOR) + targetY * JOINT_ANGLE_LERP_FACTOR
+        curr.x = lerp(curr.x, targetX, JOINT_ANGLE_LERP_FACTOR)
+        curr.y = lerp(curr.y, targetY, JOINT_ANGLE_LERP_FACTOR)
       } 
 
       //force joints to be JOINT_LENGTH apart 
-      for (let i = snakePointsIncludingMouse.length-2, ii = snakePointsIncludingMouse.length; i>=0; i--) {
-        const last = snakePointsIncludingMouse[i+1]
-        const curr = snakePointsIncludingMouse[i]
+      for (let i = snakePointsIncludingTarget.length-2, ii = snakePointsIncludingTarget.length; i>=0; i--) {
+        const last = snakePointsIncludingTarget[i+1]
+        const curr = snakePointsIncludingTarget[i]
 
         const xDist = curr.x - last.x
         const yDist = curr.y - last.y
 
         const len = Math.sqrt(xDist ** 2 + yDist ** 2)
 
-        const xTarget = last.x + (xDist / len) * JOINT_LENGTH
-        const yTarget = last.y + (yDist / len) * JOINT_LENGTH
+        if (len <= JOINT_LENGTH_MAX) {
+          const xTarget = last.x + (xDist / len) * JOINT_LENGTH
+          const yTarget = last.y + (yDist / len) * JOINT_LENGTH
+  
+          curr.x = lerp(curr.x, xTarget, JOINT_LERP_FACTOR)
+          curr.y = lerp(curr.y, yTarget, JOINT_LERP_FACTOR)
+        }
+        else {
+          const xNorm = xDist / len
+          const yNorm = yDist / len
 
-        curr.x = curr.x * (1-JOINT_LERP_FACTOR) + xTarget * JOINT_LERP_FACTOR
-        curr.y = curr.y * (1-JOINT_LERP_FACTOR) + yTarget * JOINT_LERP_FACTOR
+          curr.x = last.x + xNorm * JOINT_LENGTH_MAX
+          curr.y = last.y + yNorm * JOINT_LENGTH_MAX
+        }
       }
     })
   }
