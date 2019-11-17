@@ -9,11 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Install Dependencies
         run: npm install
-      - name: Vue CLI build
+      - name: Build
         run: npm run build
-      - name: GitHub Pages Deploy
+      - name: Deploy to GitHub Pages
         env: 
           BUILD_DIR: "/dist"
         uses: maxheld83/ghpages@v0.2.1
