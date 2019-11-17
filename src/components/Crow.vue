@@ -99,8 +99,6 @@ export default {
 
         curr.x = curr.x * (1-JOINT_LERP_FACTOR) + xTarget * JOINT_LERP_FACTOR
         curr.y = curr.y * (1-JOINT_LERP_FACTOR) + yTarget * JOINT_LERP_FACTOR
-        // curr.x = xTarget
-        // curr.y = yTarget
       }
     })
   }
@@ -111,7 +109,6 @@ export default {
 
 <style scoped>
 .Crow {
-  /* background-color: var(--surface-1); */
   border: solid 1px var(--surface-1);
   border-radius: 9px;
 }
