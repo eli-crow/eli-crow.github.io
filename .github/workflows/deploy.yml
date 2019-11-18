@@ -1,5 +1,8 @@
 name: CI
 
+env:
+  CNAME: elicrow.com
+
 on:
   push:
     branches: 
@@ -11,13 +14,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Deploy to GitHub Pages
-        uses: eli-crow/github-pages-deploy-action@2.0.4
+
+      - name: Build
+        run: npm run-script build
+      
+      - name: Add Required Files
+        run: echo "elicrow.com" > ./dist/CNAME && touch .nojekyll
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v2.5.0
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BASE_BRANCH: deploy
-          BRANCH: master
-          FOLDER: dist
-          BUILD_SCRIPT: npm install && npm run-script build
-          CNAME: elicrow.com
-          NOJEKYLL: skip
+          ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PUBLISH_BRANCH: master
+          PUBLISH_DIR: ./dist
+        with:
+          keepFiles: true
