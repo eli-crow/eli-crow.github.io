@@ -14,7 +14,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: eli-crow/github-pages-deploy-action@2.0.4
         env:
-          ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BASE_BRANCH: deploy
           BRANCH: master
           FOLDER: dist
