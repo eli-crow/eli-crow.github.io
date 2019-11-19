@@ -30,6 +30,7 @@ export default {
 
 
 <style>
+@import url("https://use.typekit.net/vmj3bdo.css");
 :root {
   --surface-0: #161616;
   --surface-1: #262626;

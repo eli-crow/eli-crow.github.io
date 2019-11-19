@@ -35,7 +35,17 @@ export default {
     })
 
     const target = new PIXI.Point()
-    // const target = app.renderer.plugins.interaction.mouse.global
+    const mouse = app.renderer.plugins.interaction.mouse.global
+    let mouseDown = false
+    const onMouseup = () => {
+      mouseDown = false
+      window.removeEventListener("mouseup", onMouseup)
+    }
+    const onMousedown = () => {
+      mouseDown = true
+      window.addEventListener("mouseup", onMouseup)
+    }
+    this.$el.addEventListener("mousedown", onMousedown)
 
     const snakePoints = Array.from({length: 100}, (_, i) => new PIXI.Point(i * JOINT_LENGTH, 0))
     const snakePointsIncludingTarget = [...snakePoints, target]
@@ -50,14 +60,18 @@ export default {
     const startTime = Date.now()
     app.ticker.add(() => {
       const time = (Date.now() - startTime) / 1000
-
-
-      const xSimp = 0.2 * noise.noise2D(0, time)
-      const ySimp = 0.2 * noise.noise2D(100, time)
-      const xCirc = 1.0 * Math.cos(time * 0.723)
-      const yCirc = 1.0 * Math.cos(time * 0.9568)
-      target.x = ((xSimp + xCirc)*0.5+0.5) * app.renderer.width  
-      target.y = ((ySimp + yCirc)*0.5+0.5) * app.renderer.height  
+      
+      if (mouseDown) {
+        target.copyFrom(mouse)
+      }
+      else {
+        const xSimp = 0.2 * noise.noise2D(0, time)
+        const ySimp = 0.2 * noise.noise2D(100, time)
+        const xCirc = 1.0 * Math.cos(time * 0.723)
+        const yCirc = 1.0 * Math.cos(time * 0.9568)
+        target.x = ((xSimp + xCirc)*0.5+0.5) * app.renderer.width  
+        target.y = ((ySimp + yCirc)*0.5+0.5) * app.renderer.height  
+      }
 
       //enforce soft maximum angle magnitude constraints on the joints
       const newAngles = []
@@ -139,5 +153,6 @@ export default {
 .Crow {
   border: solid 1px var(--surface-1);
   border-radius: 9px;
+  user-select: none;
 }
 </style>
