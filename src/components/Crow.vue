@@ -65,12 +65,21 @@ export default {
         target.copyFrom(mouse)
       }
       else {
-        const xSimp = 0.2 * noise.noise2D(0, time)
-        const ySimp = 0.2 * noise.noise2D(100, time)
-        const xCirc = 1.0 * Math.cos(time * 0.723)
-        const yCirc = 1.0 * Math.cos(time * 0.9568)
-        target.x = ((xSimp + xCirc)*0.5+0.5) * app.renderer.width  
-        target.y = ((ySimp + yCirc)*0.5+0.5) * app.renderer.height  
+        const marginLeft = 0.05
+        const marginRight = 0.55
+        const marginTop = 0.05
+        const marginBottom = 0.05
+        const w = 1 - (marginLeft+marginRight)
+        const h = 1 - (marginTop+marginBottom)
+
+        const xSimp = 0.1 * noise.noise2D(0, time)
+        const ySimp = 0.1 * noise.noise2D(100, time)
+        const xCirc = 1.0 * Math.cos(time * 0.9)
+        const yCirc = 1.0 * Math.cos(time * 1.831)
+        const xNoise = ((xSimp + xCirc) / 2)*0.5+0.5
+        const yNoise = ((ySimp + yCirc) / 2)*0.5+0.5
+        target.x = (xNoise * w + marginLeft) * app.renderer.width  
+        target.y = (yNoise * h + marginTop) * app.renderer.height  
       }
 
       //enforce soft maximum angle magnitude constraints on the joints
@@ -151,7 +160,7 @@ export default {
 
 <style scoped>
 .Crow {
-  border: solid 1px var(--surface-1);
+  /* border: solid 1px var(--surface-1); */
   border-radius: 9px;
   user-select: none;
 }

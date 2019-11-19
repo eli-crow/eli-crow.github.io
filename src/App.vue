@@ -34,7 +34,7 @@ export default {
 :root {
   --surface-0: #161616;
   --surface-1: #262626;
-  --text: #afafaf;
+  --text: #9a9a9a;
   --heading: #f4f4f4;
   --blue: #1ed3c6;
 
@@ -101,24 +101,26 @@ body {
 .site {
   height: 100%;
   width: 100%;
-  max-width: 600px;
-  max-height: 600px;
   display: grid;
+  grid-gap: 20px;
   grid:
-    "top    top     top"     1fr
-    "left   content content" 1fr
-    "bottom bottom  bottom"  1fr
-  /  1fr    1fr     1fr;
+    "interactive ."       1fr
+    "interactive content" 1fr
+    "interactive ."       1fr
+  /  1fr         1fr;
 }
 
 .interactive {
-  grid-column: 1 / span 2;
   grid-row: 1 / -1;
+  grid-column: 1 / -1;
+  min-width: 0;
 }
 
 .content {
   grid-area: content;
   position: relative;
+  align-self: center;
   z-index: 1;
+  min-width: 0;
 }
 </style>
