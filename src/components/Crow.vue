@@ -65,6 +65,7 @@ export default {
         target.copyFrom(mouse)
       }
       else {
+        // TODO: Pass a continuous noise curve as the phase of cos/sin to generate continous curling
         const marginLeft = 0.05
         const marginRight = 0.55
         const marginTop = 0.05
