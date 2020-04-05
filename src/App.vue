@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="site">
-    <Crow class="interactive"/>
-    <div class="typography content">
+    <Crow class="interactive" />
+    <!-- <div class="typography content">
       <h1>Eli Crow</h1>
       <p class="large">
         <span class="line">is a designer and developer</span>
@@ -11,7 +11,7 @@
           <a class="link" href="https://www.sep.com/" target="_blank">sep.com</a>.
         </span>
       </p>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -89,11 +89,11 @@ body {
 }
 
 .typography *:first-child {
-  margin-top: 0;   
+  margin-top: 0;
 }
 
 .typography *:last-child {
-  margin-bottom: 0;   
+  margin-bottom: 0;
 }
 </style>
 
@@ -104,10 +104,10 @@ body {
   display: grid;
   grid-gap: 20px;
   grid:
-    "interactive ."       1fr
+    "interactive ." 1fr
     "interactive content" 1fr
-    "interactive ."       1fr
-  /  1fr         1fr;
+    "interactive ." 1fr
+    / 1fr 1fr;
 }
 
 .interactive {
