@@ -62,17 +62,16 @@ export default {
     });
 
     const target = new PIXI.Point();
-    const mouse = app.renderer.plugins.interaction.mouse.global;
-    let mouseDown = false;
-    const onMouseup = () => {
-      mouseDown = false;
-      window.removeEventListener("mouseup", onMouseup);
+    let pointerDown = false;
+    const onPointerUp = () => {
+      pointerDown = false;
+      window.removeEventListener("pointerup", onPointerUp);
     };
-    const onMousedown = () => {
-      mouseDown = true;
-      window.addEventListener("mouseup", onMouseup);
+    const onPointerDown = () => {
+      pointerDown = true;
+      window.addEventListener("pointerup", onPointerUp);
     };
-    this.$el.addEventListener("mousedown", onMousedown);
+    this.$el.addEventListener("pointerdown", onPointerDown);
     gsap.to(target, {
       motionPath: {
         path: `M211.7,44C82.7,44,0,142,0,254.5S79.6,466,202.7,466S382.3,391.4,524,293.5c133.1-92,132-130.6,132-183.4
@@ -222,9 +221,10 @@ export default {
     app.ticker.add(() => {
       const time = (Date.now() - startTime) / 1000;
 
-      if (mouseDown) {
+      if (pointerDown) {
         // override the curve
-        target.set(mouse.x - shapes.position.x, mouse.y - shapes.position.y);
+        const data = app.renderer.plugins.interaction.eventData.data.global;
+        target.set(data.x - shapes.position.x, data.y - shapes.position.y);
       }
 
       //enforce soft maximum angle magnitude constraints on the joints
