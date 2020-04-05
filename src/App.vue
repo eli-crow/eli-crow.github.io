@@ -1,17 +1,17 @@
 <template>
   <div id="app" class="site">
     <Crow class="interactive" />
-    <!-- <div class="typography content">
-      <h1>Eli Crow</h1>
-      <p class="large">
-        <span class="line">is a designer and developer</span>
-        <span class="line">making tools for business folk</span>
-        <span class="line">
-          with
-          <a class="link" href="https://www.sep.com/" target="_blank">sep.com</a>.
-        </span>
-      </p>
-    </div>-->
+    <div class="content">
+      <h1 class="title">
+        <em>Eli Crow</em>
+        is a designer and developer making tools for business folk with
+        <a
+          class="link"
+          href="https://www.sep.com/"
+          target="_blank"
+        >sep.com</a>.
+      </h1>
+    </div>
   </div>
 </template>
 
@@ -34,11 +34,10 @@ export default {
 :root {
   --surface-0: #161616;
   --surface-1: #262626;
-  --text: #9a9a9a;
+  --text: #525252;
   --heading: #f4f4f4;
   --blue: #1ed3c6;
 
-  --alverata: "Alverata", "Times New Roman", sans-serif;
   --proxima-nova: "Proxima Nova", "Open Sans", "Gill Sans MT", "Gill Sans",
     Corbel, Helvetica, Arial, sans-serif;
 }
@@ -61,40 +60,6 @@ body {
   color: var(--text);
   background-color: var(--surface-0);
 }
-
-.typography {
-}
-
-.typography h1 {
-  font-family: var(--alverata);
-  font-size: 56px;
-  font-weight: 700;
-  color: var(--heading);
-  margin-top: 120px;
-  margin-bottom: 12px;
-}
-
-.typography .large {
-  font-size: 24px;
-  margin-top: 12px;
-  margin-bottom: 12px;
-}
-
-.typography .line {
-  display: block;
-}
-
-.typography .link {
-  color: var(--blue);
-}
-
-.typography *:first-child {
-  margin-top: 0;
-}
-
-.typography *:last-child {
-  margin-bottom: 0;
-}
 </style>
 
 <style scoped>
@@ -104,23 +69,26 @@ body {
   display: grid;
   grid-gap: 20px;
   grid:
-    "interactive ." 1fr
-    "interactive content" 1fr
-    "interactive ." 1fr
-    / 1fr 1fr;
+    "interactive interactive interactive" 750px
+    ". content    . " auto
+    / 1fr minmax(40px, 900px) 1fr;
 }
 
 .interactive {
-  grid-row: 1 / -1;
-  grid-column: 1 / -1;
+  grid-area: interactive;
   min-width: 0;
 }
 
 .content {
   grid-area: content;
-  position: relative;
-  align-self: center;
-  z-index: 1;
   min-width: 0;
+}
+
+.title {
+  text-align: center;
+}
+
+a {
+  color: rgb(33, 101, 168);
 }
 </style>

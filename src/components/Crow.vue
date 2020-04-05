@@ -54,6 +54,12 @@ export default {
       this.$refs.canvas.clientHeight / 2 + 10
     );
     app.stage.addChild(shapes);
+    window.addEventListener("resize", () => {
+      shapes.position.set(
+        this.$refs.canvas.clientWidth / 2 + 10,
+        this.$refs.canvas.clientHeight / 2 + 10
+      );
+    });
 
     const target = new PIXI.Point();
     const mouse = app.renderer.plugins.interaction.mouse.global;
@@ -69,10 +75,9 @@ export default {
     this.$el.addEventListener("mousedown", onMousedown);
     gsap.to(target, {
       motionPath: {
-        path: `M211.7,41.2C82.7,41.2,0,139.2,0,251.7s79.6,211.5,202.7,211.5S382.3,388.6,524,290.7
-	c133.1-92,193.3-167.2,185-208C699.9,38.3,645.7-3,588.5,0.2c-52.6,3-104.8,43.5-109,92c-4.3,49.7,42,93.8,79,110.5
-	c99.4,44.9,127.2,17.5,215.2,17.5c108,0,135,75.8,135,128c0,70-25.4,115-144,115S535,296.9,383,140.7
-	C329.8,86,298.5,41.2,211.7,41.2z`,
+        path: `M211.7,44C82.7,44,0,142,0,254.5S79.6,466,202.7,466S382.3,391.4,524,293.5c133.1-92,132-130.6,132-183.4
+	S597.3,0,536.4,0S410.8,47.7,410.8,116.1s52.2,107.6,86.9,123.3c93.1,42.1,190-16.5,278-16.5c108,0,143,91.1,143,128
+	c0,49.5-20.4,115-139,115C639.7,466,535,299.7,383,143.5C329.8,88.8,298.5,44,211.7,44z`,
         offsetX: -480,
         offsetY: -230
       },
@@ -109,13 +114,15 @@ export default {
     gsap.to(ding, {
       keyframes: [
         {
-          pixi: { rotation: 120 },
+          pixi: { rotation: 120, positionX: 220, positionY: 80 },
           duration: 2,
           ease: "expo.inOut",
           delay: 8
         },
         {
-          pixi: { rotation: 240 },
+          pixi: {
+            rotation: 240
+          },
           duration: 2.8,
           ease: "expo.inOut",
           delay: 8
@@ -141,7 +148,8 @@ export default {
     shapes.addChild(peepis);
     gsap.to(peepis, {
       pixi: {
-        rotation: -20
+        rotation: -20,
+        scale: 0.97
       },
       duration: 4.15,
       repeat: -1,
@@ -161,7 +169,8 @@ export default {
       pixi: {
         rotation: 2,
         positionX: -205,
-        positionY: 15
+        positionY: 15,
+        scale: 0.95
       },
       duration: 1.2,
       yoyoEase: true,
@@ -176,12 +185,13 @@ export default {
       PIXI.Texture.from(textureTilde, TEXTURE_SETTINGS)
     );
     tilde.anchor.set(0.5);
-    tilde.position.set(39, 220);
+    tilde.position.set(45, 220);
     shapes.addChild(tilde);
     gsap.to(tilde, {
       pixi: {
         rotation: 10,
-        positionY: 230
+        positionY: 230,
+        scale: 0.9
       },
       duration: 4.15,
       repeat: -1,
