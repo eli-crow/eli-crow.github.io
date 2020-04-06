@@ -33,7 +33,7 @@ export default {
     const JOINT_MAX_ANGLE_MAGNITUDE = Math.PI * 0.08;
     const JOINT_LERP_FACTOR = 0.4;
     const JOINT_ANGLE_LERP_FACTOR = 0.75;
-    const TEXTURE_SETTINGS = { resolution: window.devicePixelRatio };
+    const TEXTURE_SETTINGS = { resolution: 2 };
 
     const noise = new SimplexNoise(Math.random());
 
