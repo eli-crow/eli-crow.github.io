@@ -116,7 +116,7 @@ export default {
           pixi: { rotation: 120, positionX: 220, positionY: 80 },
           duration: 2,
           ease: "expo.inOut",
-          delay: 8
+          delay: 3
         },
         {
           pixi: {
@@ -124,18 +124,18 @@ export default {
           },
           duration: 2.8,
           ease: "expo.inOut",
-          delay: 8
+          delay: 3
         },
         {
-          pixi: { rotation: 360 },
+          pixi: { rotation: 360, positionX: 180, positionY: 130 },
           duration: 2.2,
           ease: "expo.inOut",
-          delay: 8
+          delay: 3
         }
       ],
       repeat: -1,
       repeatDelay: 2,
-      delay: 8
+      delay: 5
     });
 
     //peepis
