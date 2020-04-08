@@ -86,6 +86,13 @@ export default {
       repeat: -1,
       ease: "none"
     });
+    gsap.to(targetController, {
+      timeScale: 0.8,
+      duration: 2,
+      repeat: -1,
+      yoyoEase: true,
+      ease: "sine.inOut"
+    })
 
     //blob
     const blob = new PIXI.Sprite(
