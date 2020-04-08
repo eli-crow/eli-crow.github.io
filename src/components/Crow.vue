@@ -30,7 +30,7 @@ export default {
   mounted() {
     const JOINT_LENGTH = 14;
     const JOINT_LENGTH_MAX = 14;
-    const JOINT_MAX_ANGLE_MAGNITUDE = Math.PI * 0.08;
+    const JOINT_MAX_ANGLE_MAGNITUDE = Math.PI * 0.065;
     const JOINT_LERP_FACTOR = 0.4;
     const JOINT_ANGLE_LERP_FACTOR = 0.75;
     const TEXTURE_SETTINGS = { resolution: 2 };
@@ -202,16 +202,13 @@ export default {
     });
 
     //snake
-    const snakePoints = Array.from(
-      { length: 100 },
-      (_, i) => new PIXI.Point(i * JOINT_LENGTH, 0)
-    );
-    const snakePointsIncludingTarget = [...snakePoints, target];
+    const snakePoints = Array.from({ length: 100 }, (_, i) => new PIXI.Point(i * JOINT_LENGTH, 0));
+    const snakeHead = new PIXI.Point(0,0)
+    const snakePointsIncludingHead = [...snakePoints, snakeHead];
     const snake = new PIXI.SimpleRope(
       PIXI.Texture.from(textureSnake, TEXTURE_SETTINGS),
-      snakePoints
+      snakePointsIncludingHead,
     );
-    snake.x = 0;
     shapes.addChild(snake);
 
     //positioning
@@ -226,24 +223,29 @@ export default {
 
       if (pointerDown) {
         // override the motion path animation
-        const data = app.renderer.plugins.interaction.eventData.data.global;
+        const pointerPosition = app.renderer.plugins.interaction.eventData.data.global;
         target.set(
-          lerp(target.x, data.x - shapes.position.x, 0.15), 
-          lerp(target.y, data.y - shapes.position.y, 0.15)
+          pointerPosition.x - shapes.position.x,
+          pointerPosition.y - shapes.position.y
         );
       }
+
+      snakeHead.set(
+        lerp(snakeHead.x, target.x, 0.15), 
+        lerp(snakeHead.y, target.y, 0.15)
+      );
 
       //enforce soft maximum angle magnitude constraints on the joints
       const newAngles = [];
       for (
-        let i = snakePointsIncludingTarget.length - 3,
-          ii = snakePointsIncludingTarget.length;
+        let i = snakePointsIncludingHead.length - 3,
+          ii = snakePointsIncludingHead.length;
         i >= 0;
         i--
       ) {
-        const last2 = snakePointsIncludingTarget[i + 2];
-        const last = snakePointsIncludingTarget[i + 1];
-        const curr = snakePointsIncludingTarget[i];
+        const last2 = snakePointsIncludingHead[i + 2];
+        const last = snakePointsIncludingHead[i + 1];
+        const curr = snakePointsIncludingHead[i];
 
         const currXDiff = curr.x - last.x;
         const currYDiff = curr.y - last.y;
@@ -276,13 +278,13 @@ export default {
 
       //force joints to be JOINT_LENGTH apart
       for (
-        let i = snakePointsIncludingTarget.length - 2,
-          ii = snakePointsIncludingTarget.length;
+        let i = snakePointsIncludingHead.length - 2,
+          ii = snakePointsIncludingHead.length;
         i >= 0;
         i--
       ) {
-        const last = snakePointsIncludingTarget[i + 1];
-        const curr = snakePointsIncludingTarget[i];
+        const last = snakePointsIncludingHead[i + 1];
+        const curr = snakePointsIncludingHead[i];
 
         const xDist = curr.x - last.x;
         const yDist = curr.y - last.y;

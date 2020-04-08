@@ -69,6 +69,9 @@ body {
   color: var(--text);
   background-color: var(--surface-0);
 }
+em {
+  font-weight: 700;
+}
 </style>
 
 <style scoped>
