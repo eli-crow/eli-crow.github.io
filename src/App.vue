@@ -31,12 +31,14 @@ export default {
 
 <style>
 @import url("https://use.typekit.net/vmj3bdo.css");
+
 :root {
   --surface-0: #161616;
   --surface-1: #262626;
   --text: #525252;
   --heading: #f4f4f4;
   --blue: #1ed3c6;
+  --yellow: hsl(43, 100%, 50%);
 
   --proxima-nova: "Proxima Nova", "Open Sans", "Gill Sans MT", "Gill Sans",
     Corbel, Helvetica, Arial, sans-serif;
@@ -44,6 +46,13 @@ export default {
 
 html {
   height: 100%;
+}
+
+::selection {
+  background-color: var(--yellow);
+  opacity: 1 !important;
+  color: var(--surface-0);
+  padding-left: 4px;
 }
 
 body {

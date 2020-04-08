@@ -65,14 +65,16 @@ export default {
     let pointerDown = false;
     const onPointerUp = () => {
       pointerDown = false;
+      targetController.play()
       window.removeEventListener("pointerup", onPointerUp);
     };
     const onPointerDown = () => {
       pointerDown = true;
+      targetController.pause()
       window.addEventListener("pointerup", onPointerUp);
     };
     this.$el.addEventListener("pointerdown", onPointerDown);
-    gsap.to(target, {
+    const targetController = gsap.to(target, {
       motionPath: {
         path: `M211.7,44C82.7,44,0,142,0,254.5S79.6,466,202.7,466S382.3,391.4,524,293.5c133.1-92,132-130.6,132-183.4
 	S597.3,0,536.4,0S410.8,47.7,410.8,116.1s52.2,107.6,86.9,123.3c93.1,42.1,190-16.5,278-16.5c108,0,143,91.1,143,128
@@ -95,7 +97,8 @@ export default {
     gsap.to(blob, {
       pixi: {
         positionY: -35,
-        rotation: -10
+        rotation: -10,
+        scale: 1.02
       },
       duration: 3.15,
       repeat: -1,
@@ -169,12 +172,12 @@ export default {
         rotation: 2,
         positionX: -205,
         positionY: 15,
-        scale: 0.95
+        scale: 0.97
       },
-      duration: 1.2,
+      duration: 1.4,
       yoyoEase: true,
       repeat: -1,
-      ease: "expo.out",
+      ease: "expo.inOut",
       delay: 4,
       repeatDelay: 3
     });
@@ -222,9 +225,12 @@ export default {
       const time = (Date.now() - startTime) / 1000;
 
       if (pointerDown) {
-        // override the curve
+        // override the motion path animation
         const data = app.renderer.plugins.interaction.eventData.data.global;
-        target.set(data.x - shapes.position.x, data.y - shapes.position.y);
+        target.set(
+          lerp(target.x, data.x - shapes.position.x, 0.15), 
+          lerp(target.y, data.y - shapes.position.y, 0.15)
+        );
       }
 
       //enforce soft maximum angle magnitude constraints on the joints
