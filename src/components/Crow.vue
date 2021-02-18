@@ -1,6 +1,6 @@
 <template>
   <div class="Crow">
-    <canvas ref="canvas" class="canvas"></canvas>
+    <canvas ref="canvas" class="canvas" />
   </div>
 </template>
 
@@ -65,12 +65,12 @@ export default {
     let pointerDown = false;
     const onPointerUp = () => {
       pointerDown = false;
-      targetController.play()
+      targetController.play();
       window.removeEventListener("pointerup", onPointerUp);
     };
     const onPointerDown = () => {
       pointerDown = true;
-      targetController.pause()
+      targetController.pause();
       window.addEventListener("pointerup", onPointerUp);
     };
     this.$el.addEventListener("pointerdown", onPointerDown);
@@ -92,7 +92,7 @@ export default {
       repeat: -1,
       yoyoEase: true,
       ease: "sine.inOut"
-    })
+    });
 
     //blob
     const blob = new PIXI.Sprite(
@@ -210,7 +210,7 @@ export default {
 
     //snake
     const snakePoints = Array.from({ length: 100 }, (_, i) => new PIXI.Point(i * JOINT_LENGTH, 0));
-    const snakeHead = new PIXI.Point(0,0)
+    const snakeHead = new PIXI.Point(0, 0);
     const snakePointsIncludingHead = [...snakePoints, snakeHead];
     const snake = new PIXI.SimpleRope(
       PIXI.Texture.from(textureSnake, TEXTURE_SETTINGS),
@@ -238,7 +238,7 @@ export default {
       }
 
       snakeHead.set(
-        lerp(snakeHead.x, target.x, 0.15), 
+        lerp(snakeHead.x, target.x, 0.15),
         lerp(snakeHead.y, target.y, 0.15)
       );
 
@@ -246,7 +246,7 @@ export default {
       const newAngles = [];
       for (
         let i = snakePointsIncludingHead.length - 3,
-          ii = snakePointsIncludingHead.length;
+        ii = snakePointsIncludingHead.length;
         i >= 0;
         i--
       ) {
@@ -286,7 +286,7 @@ export default {
       //force joints to be JOINT_LENGTH apart
       for (
         let i = snakePointsIncludingHead.length - 2,
-          ii = snakePointsIncludingHead.length;
+        ii = snakePointsIncludingHead.length;
         i >= 0;
         i--
       ) {
@@ -322,7 +322,6 @@ export default {
 <style scoped>
 .Crow {
   /* border: solid 1px var(--surface-1); */
-  border-radius: 9px;
   user-select: none;
 }
 </style>

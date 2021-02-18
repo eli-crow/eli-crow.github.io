@@ -1,16 +1,28 @@
 <template>
   <div id="app" class="site">
-    <Crow class="interactive" />
-    <div class="content">
-      <h1 class="title">
-        <em>Eli Crow</em>
-        is a designer and developer making tools for business folk with
-        <a
-          class="link"
-          href="https://www.sep.com/"
-          target="_blank"
-        >sep.com</a>.
-      </h1>
+    <div class="intro">
+      <div class="intro-content">
+        <h1 class="title">
+          <strong>Eli Crow</strong> is a designer and developer making software products for lasting benefit at
+          <a href="https://sep.com" target="_blank" rel="noopener">sep.com</a>
+        </h1>
+      </div>
+    </div>
+    <div class="card-group">
+      <div class="card">
+        <Crow class="crow"/>
+      </div>
+      <div class="card">
+      </div>
+      <div class="card is-link">
+        <div class="card-padding">
+          <div class="card-title">A Call for a Typographic Box Model that Actually Makes Sense</div>
+          <p>Updated <time>2021</time></p>
+        </div>
+      </div>
+      <div class="card">
+
+      </div>
     </div>
   </div>
 </template>
@@ -18,8 +30,7 @@
 
 
 <script>
-import Crow from "./components/Crow.vue";
-
+import Crow from '@/components/Crow.vue';
 export default {
   components: {
     Crow
@@ -30,17 +41,17 @@ export default {
 
 
 <style>
-@import url("https://use.typekit.net/vmj3bdo.css");
+@import url("https://use.typekit.net/gwp5zpe.css");
 
 :root {
-  --surface-0: #161616;
-  --surface-1: #262626;
-  --text: #525252;
-  --heading: #f4f4f4;
+  --surface-0: #0e1115;
+  --surface-1: #1a1c1f;
+  --text: #a3a9b2;
+  --text-strong: #ffffff;
   --blue: #1ed3c6;
   --yellow: hsl(43, 100%, 50%);
 
-  --proxima-nova: "Proxima Nova", "Open Sans", "Gill Sans MT", "Gill Sans",
+  --proxima-nova: "proxima-nova", "Open Sans", "Gill Sans MT", "Gill Sans",
     Corbel, Helvetica, Arial, sans-serif;
 }
 
@@ -55,11 +66,15 @@ html {
   padding-left: 4px;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   height: 100%;
 
   -webkit-font-smoothing: antialiased;
@@ -69,38 +84,80 @@ body {
   color: var(--text);
   background-color: var(--surface-0);
 }
+body > * {
+  flex: 1 0 0;
+}
 em {
   font-weight: 700;
+}
+
+a {
+  color: var(--blue);
+}
+a:not(:hover) {
+  text-decoration: none;
+}
+
+strong {
+  color: var(--text-strong);
 }
 </style>
 
 <style scoped>
 .site {
-  height: 100%;
-  width: 100%;
+  --site-padding-top: 80px;
   display: grid;
-  grid-gap: 20px;
-  grid:
-    "interactive interactive interactive" 750px
-    ". content    . " auto
-    / 1fr minmax(40px, 900px) 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding-top: var(--site-padding-top);
 }
 
-.interactive {
-  grid-area: interactive;
-  min-width: 0;
+.intro {
+  padding: var(--padding);
+  padding-left: 32px;
+  padding-right: 64px;
 }
-
-.content {
-  grid-area: content;
-  min-width: 0;
+.intro-content {
+  position: sticky;
+  top: var(--site-padding-top);
 }
-
 .title {
-  text-align: center;
+  font-size: 32px;
+  font-weight: 300;
+  position: relative;
+  top: -0.1em;
 }
 
-a {
-  color: rgb(33, 101, 168);
+.card-group {
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: inherit;
+  gap: inherit;
+}
+.card {
+  --content-padding: 32px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-1);
+  height: 500px;
+}
+.card.is-link {
+}
+.card.is-link:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+.card-padding {
+  padding: var(--content-padding);
+}
+.card-title {
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--text-strong);
+  margin-bottom: 1rem;
+}
+
+.crow {
+  height: 100%;
 }
 </style>
