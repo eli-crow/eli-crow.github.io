@@ -7,17 +7,17 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "core-js": "^3.3.2",
-    "gsap": "^3.2.6",
-    "vue": "^2.6.10"
+    "core-js": "^3.9.0",
+    "gsap": "^3.6.0",
+    "vue": "^2.6.12"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.0.0",
-    "@vue/cli-service": "^4.0.0",
-    "pixi.js": "^5.2.0",
+    "@vue/cli-plugin-babel": "^4.5.11",
+    "@vue/cli-service": "^4.5.11",
+    "pixi.js": "^5.3.7",
     "reset-css": "^5.0.1",
     "simplex-noise": "^2.4.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.12"
   },
   "postcss": {
     "plugins": {
