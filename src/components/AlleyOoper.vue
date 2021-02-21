@@ -1,8 +1,8 @@
 <template>
   <div class="AlleyOoper">
     <svg v-if="mounted" class="svg" xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <path tab-index="0" class="track" :d="trackCurve.getSvgPathData()" ref="track" />
-      <path class="track-progress" :d="trackCurve.getSvgPathData()" stroke-dasharray="99999" :stroke-dashoffset="progressDashOffset" />
+      <path tab-index="0" class="track" :d="pathData" ref="track" />
+      <path class="track-progress" :d="pathData" stroke-dasharray="99999" :stroke-dashoffset="progressDashOffset" />
       <circle class="thumb" :cx="thumbPosition[0]" :cy="thumbPosition[1]" r="10" @pointerdown.stop.prevent="handleThumbDown" />
     </svg>
   </div>
@@ -18,37 +18,21 @@ export default {
     max: { type: [Number, String], default: 1 },
     step: { type: [Number, String], default: 0.0001 },
     value: { type: Number, default: 0 },
-    curvePoints: { type: Array, required: true }
+    curvePoints: { type: Array, required: true },
   },
 
   data() {
     return {
       mounted: false,
-      progressDashOffset: 0
+      progressDashOffset: 0,
+      pathData: '',
+      thumbPosition: [0, 0],
+      currentT: 0,
     };
   },
 
   //non-reactive
   trackCurve: null,
-
-  computed: {
-    currentT() {
-      if (this.trackCurve === null) return 0;
-      const min = Number(this.min);
-      const max = Number(this.max);
-      const range = max - min;
-      const nLength = range === 0 ? 0 : (this.value - min) / range;
-      const t = this.trackCurve.getTAtNormalizedLength(nLength);
-      return t;
-    },
-    thumbPosition() {
-      const point = this.trackCurve.getPointAt(this.currentT);
-      return point;
-    },
-    trackCurve() {
-      return this.$options.trackCurve;
-    }
-  },
 
   mounted() {
     this.mounted = true;
@@ -66,19 +50,32 @@ export default {
           this.updateCurve();
         }
       }
+    },
+    value(nv) {
+      this.updateOffset();
+      this.updateThumb();
     }
   },
 
-  updated() {
-    this.updateOffset();
-  },
-
   methods: {
+    getCurrentT() {
+      if (this.$options.trackCurve === null) return 0;
+      const min = Number(this.min);
+      const max = Number(this.max);
+      const range = max - min;
+      const nLength = range === 0 ? 0 : (this.value - min) / range;
+      const t = this.$options.trackCurve.getTAtNormalizedLength(nLength);
+      return t;
+    },
     updateOffset() {
-      const totalLengthSvgUnits = this.$refs.track?.getTotalLength();
-      const length = this.trackCurve.getNormalizedLengthAt(this.currentT) * totalLengthSvgUnits;
-      const offset = 99999 - length;
-      this.progressDashOffset = offset;
+      //need to allow svg to render before measuring.
+      //OPTIMIZE: could remove dependency on svg api by mapping internal representation to expected width and height
+      this.$nextTick(() => {
+        const totalLengthSvgUnits = this.$refs.track?.getTotalLength();
+        const length = this.$options.trackCurve.getNormalizedLengthAt(this.getCurrentT()) * totalLengthSvgUnits;
+        const offset = 99999 - length;
+        this.progressDashOffset = offset;
+      });
     },
     updateCurve() {
       const { width, height } = this.$el.getBoundingClientRect();
@@ -89,13 +86,18 @@ export default {
         c1x * width, c1y * height,
         p1x * width, p1y * height,
       );
+      this.pathData = this.$options.trackCurve.getSvgPathData();
       this.updateOffset();
+      this.updateThumb();
+    },
+    updateThumb() {
+      this.thumbPosition = this.$options.trackCurve.getPointAt(this.getCurrentT());
     },
     emitInput(pt) {
       const min = Number(this.min);
       const max = Number(this.max);
-      const newT = this.trackCurve.getNearestTInWindingOrder(this.currentT, pt);
-      const newNormalizedLength = this.trackCurve.getNormalizedLengthAt(newT);
+      const newT = this.$options.trackCurve.getNearestTInWindingOrder(this.getCurrentT(), pt);
+      const newNormalizedLength = this.$options.trackCurve.getNormalizedLengthAt(newT);
       const newVal = newNormalizedLength * max - min;
       this.$emit('input', newVal);
     },
