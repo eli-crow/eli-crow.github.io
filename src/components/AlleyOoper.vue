@@ -3,7 +3,7 @@
     <svg v-if="mounted" class="svg" xmlns="http://www.w3.org/2000/svg" version="1.1">
       <path tab-index="0" class="track" :d="pathData" ref="track" />
       <path class="track-progress" :d="pathData" stroke-dasharray="99999" :stroke-dashoffset="progressDashOffset" />
-      <circle class="thumb" :cx="thumbPosition[0]" :cy="thumbPosition[1]" r="10" @pointerdown.stop.prevent="handleThumbDown" />
+      <circle class="thumb" :cx="thumbPosition[0]" :cy="thumbPosition[1]" r="12" @pointerdown.stop.prevent="handleThumbDown" />
     </svg>
   </div>
 </template>
