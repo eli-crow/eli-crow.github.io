@@ -1,5 +1,5 @@
 <template>
-  <div class="AlleyOoper">
+  <div class="AlleyOoper" @touchstart.stop.prevent>
     <svg v-if="mounted" class="svg" xmlns="http://www.w3.org/2000/svg" version="1.1">
       <path tab-index="0" class="track" :d="pathData" ref="track" />
       <path class="track-progress" :d="pathData" stroke-dasharray="99999" :stroke-dashoffset="progressDashOffset" />
@@ -116,10 +116,12 @@ export default {
 
       const up = ev => {
         window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointercancel', up);
         window.removeEventListener('pointerup', up);
       };
 
       window.addEventListener('pointermove', move);
+      window.addEventListener('pointercancel', up);
       window.addEventListener('pointerup', up);
     },
   }
@@ -127,10 +129,13 @@ export default {
 </script>
 
 <style scoped>
+.AlleyOoper {
+}
 .svg {
   overflow: visible;
   width: 100%;
 }
+
 .track {
   fill: none;
   stroke: white;
