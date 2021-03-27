@@ -30,6 +30,8 @@
             making software products for lasting benefit with
             <a href="https://sep.com" target="_blank" rel="noopener">sep.com</a>
           </h1>
+          <hr>
+          <p>Interactive experiments and thoughts on design and development.</p>
         </div>
       </div>
 
@@ -233,6 +235,7 @@ strong {
 .intro-content {
   position: sticky;
   top: var(--site-padding-top);
+  transform: translateY(-0.5rem);
 }
 @media screen and (max-width: 500px) {
   .intro-content {
@@ -243,8 +246,6 @@ strong {
   font-size: 32px;
   font-weight: 300;
   line-height: 1.4;
-  position: relative;
-  top: -0.3em;
 }
 
 .card-group {
@@ -389,5 +390,18 @@ strong {
   grid-row: 2;
   margin: 4px;
   /* height: in html */
+}
+
+p {
+  line-height: 1.75rem;
+  font-size: 18px;
+  opacity: 0.5;
+}
+
+hr {
+  margin: 1.5rem 0;
+  border: 0;
+  height: 2px;
+  background-color: var(--surface-2);
 }
 </style>
