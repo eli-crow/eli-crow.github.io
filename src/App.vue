@@ -31,7 +31,7 @@
             <a href="https://sep.com" target="_blank" rel="noopener">sep.com</a>
           </h1>
           <hr>
-          <p>Interactive experiments and thoughts on design and development.</p>
+          <p>This site is for interactive experiments and thoughts on design and development. I am happily employed.</p>
         </div>
       </div>
 
@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <LinkContainer tag="article" class="card is-link is-bones-live">
+        <!-- <LinkContainer tag="article" class="card is-link is-bones-live">
           <img class="card-image-typography" src="@/assets/typography.svg" />
 
           <div class="card-padding">
@@ -55,7 +55,7 @@
           <a data-main-link href="#" class="card-corner-decoration is-page" aria-label="Read Article" @click.stop>
             <Icon icon="chevron-right" />
           </a>
-        </LinkContainer>
+        </LinkContainer> -->
 
         <div class="card">
           <div class="card-padding">
@@ -92,6 +92,7 @@
 
           <div class="card-padding">
             <h2 class="card-title">Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.</h2>
+            <p><time>2021</time></p>
           </div>
           <a
             href="https://bones.live"
@@ -105,10 +106,14 @@
           </a>
         </LinkContainer>
 
-        <div class="card">
+        <div class="card is-fake">
+          <p>Imagine this is one of the 30 blog posts I never finished.</p>
         </div>
-
-        <div class="card">
+        <div class="card is-fake">
+          <p>Pretend there is an impressive-looking chart here to show off my visualization skills.</p>
+        </div>
+        <div class="card is-fake">
+          <p>Some day I'll post my resumé. Today is not that day.</p>
         </div>
       </div>
     </div>
@@ -221,7 +226,7 @@ strong {
   gap: 20px;
   padding-top: var(--site-padding-top);
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
   .site {
     --site-padding-top: 40px;
     display: block;
@@ -237,7 +242,7 @@ strong {
   top: var(--site-padding-top);
   transform: translateY(-0.5rem);
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
   .intro-content {
     padding-bottom: var(--site-padding-top);
   }
@@ -254,7 +259,7 @@ strong {
   grid-template-columns: var(--site-columns);
   gap: inherit;
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
   .card-group {
     padding-right: 0;
   }
@@ -267,6 +272,9 @@ strong {
   flex-direction: column;
   background-color: var(--surface-1);
   height: 520px;
+}
+.card.is-fake {
+  padding: var(--content-padding);
 }
 .card.is-link {
 }
